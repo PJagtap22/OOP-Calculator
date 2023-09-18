@@ -1,9 +1,17 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 
-double calculator(double a, double b, char opr);
-
+class Calculator
+{
+    public:
+    double calculator(double a, double b, char opr);
+};
 #endif
+
+
+// double calculator(double a, double b, char opr);
+
+// #endif
 
 
 // class Calculator
@@ -23,3 +31,4 @@ double calculator(double a, double b, char opr);
 //     double logarithm(double base, double x);
 // };
 // #endif
+

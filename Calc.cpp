@@ -1,29 +1,104 @@
 #include <iostream>
 #include <cmath>
+#include <stdexcept>
+#include <assert.h>
+#define NDEBUG
 
 using namespace std;
 
-double calculator(double a, double b, char opr);
+class Calculator
+{
+public:
+    double calculator(double a, double b, char opr)
+    {
+        double result = 0.0;
+
+        switch (opr)
+        {
+        case '+':
+            result = a + b;
+            break;
+        case '-':
+            result = a - b;
+            break;
+        case '*':
+            result = a * b;
+            break;
+        case '/':
+            if (b != 0)
+            {
+                result = a / b;
+            }
+            else
+            {
+                throw runtime_error("UNDEFINED");
+            }
+            break;
+        case '%':
+            result = (a * b) / 100.0;
+            break;
+        case 's':
+            result = a * a;
+            break;
+        case '^':
+            result = pow(a, b);
+            break;
+        case 'r':
+            if (a >= 0)
+            {
+                result = sqrt(a);
+            }
+            else
+            {
+                throw runtime_error("Square root of a negative number is not allowed.");
+            }
+            break;
+        case 'l':
+            if (a > 0)
+            {
+                result = log(a);
+            }
+            else
+            {
+                throw runtime_error("Natural logarithm is defined for positive numbers only.");
+            }
+            break;
+        case 'o':
+            if (a > 0)
+            {
+                result = log10(a);
+            }
+            else
+            {
+                throw runtime_error("Logarithm is defined for positive numbers only.");
+            }
+            break;
+        default:
+            throw runtime_error("Please try again!");
+        }
+
+        return result;
+    }
+};
 
 int main()
 {
-
+    Calculator calc;
     double num1, num2;
     char opr;
 
-    // Calculator calculator;
     cout << "Enter first number: ";
     cin >> num1;
-    cout << "Enter operator (+, -, *, /, %, square, sqrt, ^, ln, log Q for quit): ";
+    cout << "Enter operator (+, -, *, /, %, s, r, ^, l, o): ";
     cin >> opr;
+    assert(opr == '+' || opr == '-' || opr == '*' || opr == '/' || opr == '%' 
+    || opr == 's' || opr == '^' || opr == 'r' || opr == 'l' || opr == 'o');
 
-    // other operators/characters other than these would output a message "Invalid operation".
-
-    while(opr != '+' && opr != '-' && opr != '*' && opr != '/' && opr != '%' && opr != 's' 
-    && opr != 'r' && opr != '^' && opr != 'l' && opr != 'o')
+    while (opr != '+' && opr != '-' && opr != '*' && opr != '/' && opr != '%' 
+    && opr != 's' && opr != 'r' && opr != '^' && opr != 'l' && opr != 'o')
     {
-        cout << "Invalid operation" << endl;
-        return 1;
+        cout << "Invalid operation. Enter Valid operator: " << endl;
+        cin >> opr;
     }
 
     if (opr != 's' && opr != 'r' && opr != 'l' && opr != 'o')
@@ -31,78 +106,48 @@ int main()
         cout << "Enter second number: ";
         cin >> num2;
     }
-    else
+    try
     {
-        num2 = 0; // num2 is set to be 0
+        double result = calc.calculator(num1, num2, opr);
+        cout << "Result: " << result << endl;
     }
-    cout << "Result: " << calculator(num1, num2, opr) << endl;
+    catch (const runtime_error &msg)
+    {
+        cout << "Error: " << msg.what() << endl;
+    }
+    catch (...)
+    {
+        cout << "An unexpected error occurred." << endl;
+    }
 
-    system("PAUSE");
     return 0;
 }
 
-double calculator(double a, double b, char opr)
-{
-    double result = 0.0;
+// other operators/characters other than these would output a message "Invalid operation".
+//     try
+//     {
+//         while (opr != '+' && opr != '-' && opr != '*' && opr != '/' && opr != '%' && opr != 's' && opr != 'r' && opr != '^' && opr != 'l' && opr != 'o')
+//         {
+//             cout << "Invalid operation. Enter Valid operator: " << endl;
+//             cin >> opr;
+//         }
 
-    if (opr == '+')
-    {
-        result = a + b;
-    }
-    else if (opr == '-')
-    {
-        result = a - b;
-    }
-    else if (opr == '*')
-    {
-        result = a * b;
-    }
-    else if (opr == '/')
-    {
-        result = a / b;
-    }
-    else if (opr == '%')
-    {
-        result = (a * b) / 100.0;
-    }
-    else if (opr == 's')
-    {
-        result = (a * a);
-    }
-    else if (opr == 'r')
-    {
-        if (a < 0)
-        {
-            cout << "Sqrt of negative no. not allowed." << endl;
-            return 1;
-        }
-        result = sqrt(a);
-    }
-    else if (opr == '^')
-    {
-        result = pow(a, b);
-    }
-    else if (opr == 'l')
-    {
-        if (a <= 0)
-        {
-            cout << "NalturalLog defined for positive no. only." << endl;
-            return 1;
-        }
-        result = log(a);
-    }
-    else if (opr == 'o')
-    {
-        if (a <= 0 || b <= 0)
-        {
-            cout << "Logarithm defined for positive no. only." << endl;
-            return 1;
-        }
-        result = log10(a);
-    }
-    else
-    {
-        cout << "Please try again! " << endl;
-    }
-    return result;
-}
+//         if (opr != 's' && opr != 'r' && opr != 'l' && opr != 'o')
+//         {
+//             cout << "Enter second number: ";
+//             cin >> num2;
+//         }
+//         double result = calc.calculator(num1, num2, opr);
+
+//         cout << "Result: " << result << endl;
+//     }
+//     catch (const runtime_error &msg)
+//     {
+//         cout << "Error: " << msg.what() << endl;
+//     }
+//     catch (...)
+//     {
+//         cout << "An unexpected error occurred." << endl;
+//     }
+//     return 0;
+// }
