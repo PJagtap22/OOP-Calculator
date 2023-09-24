@@ -2,51 +2,49 @@
 #include <cmath>
 #include <stdexcept>
 #include <assert.h>
-#define NDEBUG
+#define NDEBUG // disabling assertion
 
 using namespace std;
 
 class Calculator
 {
 public:
-    double calculator(double a, double b, char opr)
+    void calculator(double a, double b, char opr, double *result)
     {
-        double result = 0.0;
-
-        switch (opr)
+        switch (opr) // checks the value of opr
         {
         case '+':
-            result = a + b;
+            *result = a + b;
             break;
         case '-':
-            result = a - b;
+            *result = a - b;
             break;
         case '*':
-            result = a * b;
+            *result = a * b;
             break;
         case '/':
             if (b != 0)
             {
-                result = a / b;
+                *result = a / b;
             }
             else
             {
                 throw runtime_error("UNDEFINED");
-            }
+            } // the program is successfully compiled but in runtime throws an error.
             break;
         case '%':
-            result = (a * b) / 100.0;
+            *result = (a * b) / 100.0;
             break;
         case 's':
-            result = a * a;
+            *result = a * a;
             break;
         case '^':
-            result = pow(a, b);
+            *result = pow(a, b);
             break;
         case 'r':
             if (a >= 0)
             {
-                result = sqrt(a);
+                *result = sqrt(a);
             }
             else
             {
@@ -56,7 +54,7 @@ public:
         case 'l':
             if (a > 0)
             {
-                result = log(a);
+                *result = log(a);
             }
             else
             {
@@ -66,7 +64,7 @@ public:
         case 'o':
             if (a > 0)
             {
-                result = log10(a);
+                *result = log10(a);
             }
             else
             {
@@ -76,14 +74,12 @@ public:
         default:
             throw runtime_error("Please try again!");
         }
-
-        return result;
     }
 };
 
 int main()
 {
-    Calculator calc;
+    Calculator calc; // an instance of calculator is created
     double num1, num2;
     char opr;
 
@@ -91,13 +87,14 @@ int main()
     cin >> num1;
     cout << "Enter operator (+, -, *, /, %, s, r, ^, l, o): ";
     cin >> opr;
-    assert(opr == '+' || opr == '-' || opr == '*' || opr == '/' || opr == '%' 
-    || opr == 's' || opr == '^' || opr == 'r' || opr == 'l' || opr == 'o');
-
-    while (opr != '+' && opr != '-' && opr != '*' && opr != '/' && opr != '%' 
-    && opr != 's' && opr != 'r' && opr != '^' && opr != 'l' && opr != 'o')
+    assert(opr == '+' || opr == '-' || opr == '*' || opr == '/' || opr == '%' ||
+           opr == 's' || opr == '^' || opr == 'r' || opr == 'l' || opr == 'o');
+    // checks if the operation entered is valid, is not the program will terminate with an assertion failed message.
+    while (opr != '+' && opr != '-' && opr != '*' && opr != '/' && opr != '%' &&
+           opr != 's' && opr != 'r' && opr != '^' && opr != 'l' && opr != 'o')
+    // This loop continues until a valid operator is entered. It repeatedly prompts for valid input if an invalid operator is provided.
     {
-        cout << "Invalid operation. Enter Valid operator: " << endl;
+        cout << "Invalid operation. Enter a valid operator: " << endl;
         cin >> opr;
     }
 
@@ -106,10 +103,13 @@ int main()
         cout << "Enter second number: ";
         cin >> num2;
     }
+
     try
     {
-        double result = calc.calculator(num1, num2, opr);
-        cout << "Result: " << result << endl;
+        double *result = new double; // Allocate dynamic memory for the result
+        calc.calculator(num1, num2, opr, result);
+        cout << "Result: " << *result << endl;
+        delete result; // Deallocate the memory when done
     }
     catch (const runtime_error &msg)
     {
@@ -122,32 +122,3 @@ int main()
 
     return 0;
 }
-
-// other operators/characters other than these would output a message "Invalid operation".
-//     try
-//     {
-//         while (opr != '+' && opr != '-' && opr != '*' && opr != '/' && opr != '%' && opr != 's' && opr != 'r' && opr != '^' && opr != 'l' && opr != 'o')
-//         {
-//             cout << "Invalid operation. Enter Valid operator: " << endl;
-//             cin >> opr;
-//         }
-
-//         if (opr != 's' && opr != 'r' && opr != 'l' && opr != 'o')
-//         {
-//             cout << "Enter second number: ";
-//             cin >> num2;
-//         }
-//         double result = calc.calculator(num1, num2, opr);
-
-//         cout << "Result: " << result << endl;
-//     }
-//     catch (const runtime_error &msg)
-//     {
-//         cout << "Error: " << msg.what() << endl;
-//     }
-//     catch (...)
-//     {
-//         cout << "An unexpected error occurred." << endl;
-//     }
-//     return 0;
-// }
